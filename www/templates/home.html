@@ -1,0 +1,24 @@
+
+<ion-view view-title="Lychee">
+
+    <ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-ios-gear-outline" ng-click="doSomething()">
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content></ion-content>
+      <ion-footer-bar align-title="left" class="bar-stable">
+
+
+        <div class="item item-input-inset item-stable" style="width: 100%; border: none;">
+          <label class="item-input-wrapper label-stable">
+            <input type="text" placeholder="Lychee URL" style="width: 100%;" ng-model="lychee_url">
+          </label>
+          <button class="button button-small button-icon" ng-click="storeLycheeUrl()">
+            Show my photos
+          </button>
+        </div>
+
+
+    </ion-footer-bar>
+</ion-view>

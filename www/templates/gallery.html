@@ -1,0 +1,25 @@
+<ion-modal-view class="imageView">
+  <ion-header-bar class="headerView bar-stable" ng-show="!hideAll">
+    <button class="button button-outline button-light close-btn" ng-click="closeModal()">Close</button>
+  </ion-header-bar>
+
+  <ion-content class="has-no-header" scroll="false">
+    <ion-slide-box does-continue="false" active-slide="activeSlide" show-pager="false" class="listContainer" on-slide-changed="slideChanged($index)">
+      <ion-slide ng-repeat="slide in slides track by $index">
+        <ion-scroll direction="xy"
+                    locking="false"
+                    zooming="true"
+                    min-zoom="1"
+                    scrollbar-x="false"
+                    scrollbar-y="false"
+                    ion-slide-action
+                    delegate-handle="slide-{{$index}}"
+                    >
+        <div class="item item-image gallery-slide-view">
+            <div class="slide_image" style="background-image: url({{slide.url}}); "></div>
+        </div>
+        </ion-scroll>
+      </ion-slide>
+    </ion-slide-box>
+  </ion-content>
+</ion-modal-view>

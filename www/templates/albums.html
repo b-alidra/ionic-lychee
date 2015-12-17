@@ -1,0 +1,29 @@
+<ion-view view-title="Albums">
+    <ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-ios-plus-outline" ng-click="doSomething()">
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content class="scroll-bg" ng-init="refresh()">
+
+        <ion-refresher
+                pulling-text="Pull to refresh..."
+                on-refresh="refresh()">
+        </ion-refresher>
+
+        <div class="multi_items_row">
+              <div
+                  class="album"
+                  ui-sref="app.album({albumID: album.id })"
+                  ng-repeat="album in albums"
+              >
+                <img src="{{ album.thumbs[0] }}">
+                <div class="overlay">
+	                  <h1>{{ album.title }}</h1>
+	                  <a>{{ album.sysdate }}</a>
+	              </div>
+              </div>
+        </div>
+
+    </ion-content>
+</ion-view>
