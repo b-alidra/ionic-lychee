@@ -19,44 +19,44 @@ angular.module('lychee.controllers', ['lychee.services'])
         });
         $state.go("app.albums");
     }
+
+    $scope.disconnect = function() {
+        $localStorage.set('lychee_url', '');
+        $ionicHistory.nextViewOptions({
+            disableBack: true
+        });
+        $state.go("app.home");
+    };
 })
 
 .controller('AlbumsCtrl', function($scope, $api) {
     $scope.refresh = function() {
         $api.getAlbums(function(err, albums) {
             if (!err)
-            $scope.albums = albums;
-            $scope.$broadcast('scroll.refreshComplete');
+                $scope.albums = albums;
         });
     };
 })
 
-.controller('AlbumCtrl', function($scope, $api, $stateParams, $ionicModal, $ionicScrollDelegate, $ionicSlideBoxDelegate) {
-    $scope.photos      = [];
-    $scope.slides      = [];
-    var first_shown_index = 0;
+.controller('AlbumCtrl', function($scope, $api, $stateParams, $ionicModal, $ionicSlideBoxDelegate) {
+    $scope.album        = {};
+    $scope.slides       = [];
+    $scope.currentPhoto = null;
+    $scope.showInfos    = false;
 
     $scope.refresh = function() {
-        $api.getAlbum($stateParams.albumID, function(err, photos) {
+        $api.getAlbum($stateParams.albumID, function(err, album) {
             if (!err)
-            $scope.photos = photos;
-            $scope.$broadcast('scroll.refreshComplete');
+                $scope.album = album;
         });
     };
 
     $scope.showGallery = function(index) {
-        $scope.slides      = [];
-        $scope.activeSlide = 0;
-        first_shown_index  = index;
+        $scope.activeSlide  = index;
+        $scope.currentPhoto = $scope.album.photos[index];
+        $scope.showInfos    = false;
+        loadPhotoInfos(index);
 
-        if (index >= 0) {
-            $scope.slides.push($scope.photos[index - 1]);
-            $scope.activeSlide ++;
-        }
-            $scope.slides.push($scope.photos[index]);
-        if (index < $scope.photos.length - 1)
-            $scope.slides.push($scope.photos[index + 1]);
-            $ionicSlideBoxDelegate.update();
         $ionicModal.fromTemplateUrl('templates/gallery.html', {
             scope: $scope,
             animation: 'fade-in'
@@ -64,9 +64,24 @@ angular.module('lychee.controllers', ['lychee.services'])
             $scope.modal = modal;
             $scope.modal.show();
         });
-
-        $ionicSlideBoxDelegate.update();
     };
+
+    $scope.slideChanged = function(index) {
+        $scope.currentPhoto = $scope.album.photos[index];
+        loadPhotoInfos(index);
+    };
+
+    $scope.toggleInfos = function() { $scope.showInfos = !$scope.showInfos; }
+
+    var loadPhotoInfos = function(index) {
+        $api.getPhoto($scope.currentPhoto.id, $stateParams.albumID, function(err, photo) {
+            console.log(photo);
+            $scope.currentPhoto = photo;
+        });
+    };
+    $scope.mustBeVisible = function(index) {
+        return Math.abs($ionicSlideBoxDelegate.currentIndex() - index) < 5;
+    }
 
     $scope.closeModal = function() {
         $scope.modal.hide();
@@ -80,19 +95,4 @@ angular.module('lychee.controllers', ['lychee.services'])
           console.log(err.message);
         }
       });
-
-    $scope.slideChanged = function(index) {
-        if ($scope.slides.length > 0) {
-            index += first_shown_index;
-        }
-        else
-            $scope.activeSlide = index - first_shown_index + 1;
-        if (index > 0 && ($scope.slides.length == 0 || first_shown_index > index))
-            $scope.slides.unshift($scope.photos[index - 1]);
-        if ($scope.slides.length <= 1)
-            $scope.slides.push($scope.photos[index]);
-        if (index < $scope.photos.length - 1 && ($scope.slides.length == 2 || first_shown_index < index))
-            $scope.slides.push($scope.photos[index + 1]);
-            $ionicSlideBoxDelegate.update();
-    };
 });
