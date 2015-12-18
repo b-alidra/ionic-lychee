@@ -81,6 +81,7 @@ body, ion-content {
     background: #1D1D1D url('../img/lychee.png') no-repeat center center;
     background-size: auto;
     height: 100%;
+    border: 0;
 }
 .item-infos { padding: 0; }
 .item-infos .item { padding: 0 10px; }
