@@ -1,27 +1,23 @@
-<ion-view view-title="{{ album.title }}">
+<ion-view>
+    <ion-nav-title>
+        {{ album.title }}
+    </ion-nav-title>
     <ion-nav-buttons side="right">
-        <button class="button button-icon button-clear ion-ios-plus-outline" ng-click="doSomething()">
+        <button class="button button-icon button-clear ion-ios-plus-empty" ng-click="doSomething()">
         </button>
     </ion-nav-buttons>
 
     <ion-content class="scroll-bg" ng-init="refresh()">
 
-        <ion-refresher
-        pulling-text="Pull to refresh..."
-        on-refresh="refresh()">
-    </ion-refresher>
-
-    <div class="multi_items_row">
-        <div
-        class="photo"
-        ng-repeat="photo in photos"
-        >
-        <img src="{{ photo.thumbUrl }}" ng-click="showGallery({{$index}})">
-        <div class="overlay">
-            <h1>{{ photo.title }}</h1>
-            <a><i class="icon ion-ios-camera-outline"></i>{{ photo.sysdate }}</a></div>
+        <div class="multi_items_row">
+            <div class="photo" ng-repeat="photo in album.photos">
+                <img src="{{ photo.thumbUrl }}" ng-click="showGallery({{$index}})">
+                <div class="overlay">
+                    <h1>{{ photo.title }}</h1>
+                    <a><i class="icon ion-ios-camera-outline"></i>{{ photo.sysdate }}</a>
+                </div>
+            </div>
         </div>
-    </div>
 
-</ion-content>
+    </ion-content>
 </ion-view>
