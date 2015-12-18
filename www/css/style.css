@@ -77,11 +77,12 @@ body, ion-content {
 
 
 .scroll-view.ionic-scroll,
-.scroll, .scroll > div {
+.scroll, .item.item-image, .slider {
     background: #1D1D1D url('../img/lychee.png') no-repeat center center;
     background-size: auto;
     height: 100%;
 }
+.scroll { background: transparent; }
 .slide_image {
     height: 100%;
     background-size: contain;
