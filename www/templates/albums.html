@@ -1,15 +1,10 @@
-<ion-view view-title="Albums">
+<ion-view view-title="{{ albums.length}} Albums">
     <ion-nav-buttons side="right">
-        <button class="button button-icon button-clear ion-ios-plus-outline" ng-click="doSomething()">
+        <button class="button button-icon button-clear ion-ios-plus-empty" ng-click="doSomething()">
         </button>
     </ion-nav-buttons>
 
     <ion-content class="scroll-bg" ng-init="refresh()">
-
-        <ion-refresher
-                pulling-text="Pull to refresh..."
-                on-refresh="refresh()">
-        </ion-refresher>
 
         <div class="multi_items_row">
               <div
