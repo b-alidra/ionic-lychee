@@ -77,11 +77,14 @@ body, ion-content {
 
 
 .scroll-view.ionic-scroll,
-.scroll, .item.item-image, .slider {
+.scroll, .item.item-image, .item-infos, .slider {
     background: #1D1D1D url('../img/lychee.png') no-repeat center center;
     background-size: auto;
     height: 100%;
 }
+.item-infos { padding: 0; }
+.item-infos .item { padding: 0 10px; }
+
 .scroll { background: transparent; }
 .slide_image {
     height: 100%;
