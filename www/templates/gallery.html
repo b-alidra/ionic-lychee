@@ -3,9 +3,13 @@
         <button class="button icon-left ion-ios-close-empty button-clear button-light close-btn" ng-click="closeModal()"></button>
         <div class="title title-center header-item">
             {{ currentPhoto.title }}
-            <!-- ><i class="icon ion-ios-camera-outline"></i>{{ currentPhoto.sysdate }}</a></div> -->
         </div>
-        <button class="button icon-left ion-ios-information-empty button-clear button-light close-btn" ng-click="toggleInfos()"></button>
+        <div class="buttons buttons-right">
+            <button class="button icon-left ion-ios-arrow-{{ highRes ? 'down' : 'up' }} button-clear button-light close-btn" ng-click="toggleResolution()"></button>
+            &nbsp;&nbsp;&nbsp;
+            <button class="button icon-left ion-ios-more{{ showInfos ? '-outline' : '' }} button-clear button-light close-btn" ng-click="toggleInfos()"></button>
+            &nbsp;&nbsp;&nbsp;
+        </div>
     </ion-header-bar>
 
     <ion-content class="has-no-header">
@@ -22,9 +26,10 @@
                 ng-if="mustBeVisible($index)"
                 >
                 <div class="item item-image gallery-slide-view" ng-if="!showInfos">
-                    <div class="slide_image" style="background-image: url({{slide.thumbUrl}}); "></div>
+                    <div class="slide_image" style="background-image: url({{slide.thumbUrl}}); " ng-if="!highRes"></div>
+                    <div class="slide_image" style="background-image: url({{slide.url}}); " ng-if="highRes"></div>
                 </div>
-                <div class="item" ng-if="showInfos">
+                <div class="item item-infos" ng-if="showInfos">
                     <div class="list stable">
                         <div class="item item-divider text-center">
                             Basics

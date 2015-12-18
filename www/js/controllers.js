@@ -41,6 +41,7 @@ angular.module('lychee.controllers', ['lychee.services'])
     $scope.slides       = [];
     $scope.currentPhoto = null;
     $scope.showInfos    = false;
+    $scope.highRes      = false;
 
     $scope.refresh = function() {
         $api.getAlbum($stateParams.albumID, function(err, album) {
@@ -70,6 +71,10 @@ angular.module('lychee.controllers', ['lychee.services'])
     };
 
     $scope.toggleInfos = function() { $scope.showInfos = !$scope.showInfos; }
+    $scope.toggleResolution = function() {
+        $scope.highRes = !$scope.highRes;
+        $scope.showInfos = false;
+    }
 
     var loadPhotoInfos = function(index) {
         $api.getPhoto($scope.currentPhoto.id, $stateParams.albumID, function(err, photo) {
