@@ -1,10 +1,7 @@
 /* Empty. Add your own CSS if you like */
 body, ion-content {
-  background-color: #1D1D1D;
-  background-image: url('../img/lychee.png');
-  background-position: center;
+  background: #1D1D1D url('../img/lychee.png') no-repeat center center;
   background-size: auto;
-  background-repeat: no-repeat;
 }
 
 .album, .photo {
@@ -12,32 +9,15 @@ body, ion-content {
     width: 152px; /* 20% of the viewport width */
     height: 152px;
     margin: 25px 0 0 25px !important;
-    /*-webkit-animation-duration: 1.2s;
-    animation-duration: 1.2;
-    animation-fill-mode: forwards;
-    animation-timing-function: cubic-bezier(.51, .92, .24, 1);
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    transition: color 1.2s, opacity 1.2s ease-out, box-shadow 1.2s, -webkit-transform 1.2s ease-out;
-    transition: color 1.2s, opacity 1.2s ease-out, transform 1.2s ease-out, box-shadow 1.2s;
-    transition: color 1.2s, opacity 1.2s ease-out, transform 1.2s ease-out, box-shadow 1.2s, -webkit-transform 1.2s ease-out;
-    -webkit-animation-name: zoomIn;
-    animation-name: zoomIn;*/
 }
 
 .album img, .photo img {
     position: absolute;
-    width: 150px; /* 20% of the viewport width */
+    width: 150px;
     height: 150px;
     background: #222;
     box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
     border: 1px solid rgba(255, 255, 255, .5);
-    /*transition: opacity 1.2s ease-out, border-color 1.2s ease-out, -webkit-transform 1.2s ease-out;
-    transition: opacity 1.2s ease-out, transform 1.2s ease-out, border-color 1.2s ease-out;
-    transition: opacity 1.2s ease-out, transform 1.2s ease-out, border-color 1.2s ease-out, -webkit-transform 1.2s ease-out;
-    will-change: transform;*/
  }
 .album:hover img, .photo:hover img { border-color: #2293EC; }
  .overlay {
@@ -89,121 +69,6 @@ body, ion-content {
     flex-wrap: wrap;
 }
 
-#imageview {
-    position: fixed;
-    display: none;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(10, 10, 10, .98);
-    transition: background-color .3s
-}
-
-#imageview.view {
-    background-color: inherit
-}
-
-#imageview.full {
-    background-color: #000
-}
-
-#imageview #image {
-    position: absolute;
-    top: 60px;
-    right: 30px;
-    bottom: 30px;
-    left: 30px;
-    transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, -webkit-transform .3s cubic-bezier(.51, .92, .24, 1.15);
-    transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, transform .3s cubic-bezier(.51, .92, .24, 1.15);
-    transition: top .3s, right .3s, bottom .3s, left .3s, margin-top .3s, opacity .2s, transform .3s cubic-bezier(.51, .92, .24, 1.15), -webkit-transform .3s cubic-bezier(.51, .92, .24, 1.15);
-    will-change: transform;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    background-size: contain;
-    -webkit-animation-name: zoomIn;
-    animation-name: zoomIn;
-    animation-duration: .3s;
-    -webkit-animation-timing-function: cubic-bezier(.51, .92, .24, 1.15);
-    animation-timing-function: cubic-bezier(.51, .92, .24, 1.15)
-}
-
-#imageview #image.small {
-    top: 50%;
-    right: auto;
-    bottom: auto;
-    left: 50%
-}
-
-#imageview #image.full {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0
-}
-
-#imageview .arrow_wrapper {
-    position: fixed;
-    width: 15%;
-    height: calc(100% - 60px);
-    top: 60px
-}
-
-#imageview .arrow_wrapper--previous {
-    left: 0
-}
-
-#imageview .arrow_wrapper--next {
-    right: 0
-}
-
-#imageview .arrow_wrapper a {
-    position: fixed;
-    top: 50%;
-    margin: -19px 0 0;
-    padding: 8px 12px;
-    width: 16px;
-    height: 22px;
-    background-size: 100% 100%;
-    border: 1px solid rgba(255, 255, 255, .8);
-    opacity: .6;
-    z-index: 2;
-    transition: opacity .2s ease-out, -webkit-transform .2s ease-out;
-    transition: transform .2s ease-out, opacity .2s ease-out;
-    transition: transform .2s ease-out, opacity .2s ease-out, -webkit-transform .2s ease-out;
-    will-change: transform
-}
-
-#imageview .arrow_wrapper a#previous {
-    left: -1px;
-    -webkit-transform: translateX(-100%);
-    -ms-transform: translateX(-100%);
-    transform: translateX(-100%)
-}
-
-#imageview .arrow_wrapper a#next {
-    right: -1px;
-    -webkit-transform: translateX(100%);
-    -ms-transform: translateX(100%);
-    transform: translateX(100%)
-}
-
-#imageview .arrow_wrapper:hover a#next, #imageview .arrow_wrapper:hover a#previous {
-    -webkit-transform: translateX(0);
-    -ms-transform: translateX(0);
-    transform: translateX(0)
-}
-
-#imageview .arrow_wrapper a:hover {
-    opacity: 1
-}
-
-#imageview .arrow_wrapper .iconic {
-    fill: rgba(255, 255, 255, .8);
-    -webkit-filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .4));
-    filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .4))
-}
-
 .photo_slide {
     width: 100%;
     height: 100%;
@@ -211,148 +76,15 @@ body, ion-content {
 
 
 
-.slider-slide { background: #1D1D1D; }
 .scroll-view.ionic-scroll,
-.scroll, .scroll > div { height: 100%; background: #1D1D1D; }
+.scroll, .scroll > div {
+    background: #1D1D1D url('../img/lychee.png') no-repeat center center;
+    background-size: auto;
+    height: 100%;
+}
 .slide_image {
     height: 100%;
     background-size: contain;
     background-position: 50% 50%;
     background-repeat: no-repeat;
-}
-.item.item-image { border: 0; }
-
-
-
-.image-modal {
-    width: 100% !important;
-    height: 100%;
-    top: 0 !important;
-    left: 0 !important;
-}
-
-.transparent {
-  background: rgba(0,0,0,1);
-}
-
-.slider {
-    width: 100%;
-    height: 100%;
-}
-
-.image {
-    width: 100%;
-    height: 600px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center, center;
-}
-
-
-
-.gallery-view{
-
-  .image-container{
-    position: relative;
-    overflow: hidden;
-    border: 2px solid white;
-
-    img{
-      position: absolute;
-      top: -9999px;
-      bottom: -9999px;
-      left: -9999px;
-      right: -9999px;
-      margin: auto;
-    }
-  }
-}
-
-.imageView{
-
-  .has-no-header{
-    top:0px !important;
-  }
-
-  .close-btn{
-    font-weight: 900;
-    border:2px solid;
-    position:absolute;
-    right:5px;
-    border-radius: 5px;
-  }
-
-  .headerView{
-    background-image:none;
-    background-color: black;
-  }
-
-  .gallery-slide-view{
-    width: 98%;
-    background-color: transparent;
-  }
-
-  .image-subtitle{
-    color: white;
-    position: absolute;
-    bottom: 0px;
-    left: 10px;
-    width: 95%;
-    height:15%;
-    z-index: 100;
-  }
-
-  .listContainer {
-    width: 100%;
-    height: 100%;
-    background-color:black;
-  }
-
-  .hideAll{
-    display:none;
-  }
-
-  img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  .scroll-view {
-    position: absolute;
-    width: 100%;
-    height:100%;
-  }
-
-  .scroll-view .scroll {
-    min-height: 100%;
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-direction: normal;
-    -moz-box-direction: normal;
-    -webkit-box-orient: horizontal;
-    -moz-box-orient: horizontal;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-flex-wrap: nowrap;
-    -ms-flex-wrap: nowrap;
-    flex-wrap: nowrap;
-    -webkit-box-pack: center;
-    -moz-box-pack: center;
-    -webkit-justify-content: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-align-content: stretch;
-    -ms-flex-line-pack: stretch;
-    align-content: stretch;
-    -webkit-box-align: center;
-    -moz-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-  }
 }
