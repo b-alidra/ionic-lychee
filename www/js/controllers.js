@@ -1,5 +1,3 @@
-var api_host = 'https://photos.b-alidra.com' + '/php/api.php'; //window.localStorage.getItem("lychee_url") + '/php/api.php';
-
 angular.module('lychee.controllers', ['lychee.services'])
 
 .controller('AppCtrl', function($scope, $state, $ionicHistory, $localStorage) {
