@@ -10,6 +10,10 @@ Lychee is a free photo-management tool, which runs on your server or web-space. 
 #### This project
 This app is only a "viewer" for now.  
 Connect to your Lychee server and visualize your photos.  
+#### Live test on your device
+In case you don't know, Ionic View mobile app is the simplest way to test an ionic app. Download it here http://view.ionic.io/
+
+Take a look with Ionic View using ID: <b>38d7eb1f</b>
 
 #### Build
 This is a Ionic project, so first [install Ionic](http://ionicframework.com/docs/guide/installation.html), then clone this repository and enjoy...
