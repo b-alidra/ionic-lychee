@@ -18,10 +18,20 @@ $dark:                            #444 !default;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
+/* Base black color */
 $stable:                          #222222;
 $button-stable-text:              #FFF !default;
 $base-background-color:           #1D1D1D !default;
-/*$base-color:                      #FFF !default;*/
+
+/* List divider items */
+$item-divider-bg:                 #1D1D1D !default;
+$item-divider-color:              #FFF !important;
+
+/* Fix modal inset mode */
+$modal-inset-mode-top:            0 !default;
+$modal-inset-mode-right:          0 !default;
+$modal-inset-mode-bottom:         0 !default;
+$modal-inset-mode-left:           0 !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";

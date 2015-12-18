@@ -15,6 +15,7 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
+/* Fix modal inset mode */
 /*$base-color:                      #FFF !default;*/
 /*!
   Ionicons, v2.0.1
@@ -5288,12 +5289,12 @@ ion-tabs.tabs-color-active-dark .tab-item {
 
 @media (min-width: 680px) {
   .modal {
-    top: 20%;
-    right: 20%;
-    bottom: 20%;
-    left: 20%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     min-height: 240px;
-    width: 60%; }
+    width: 100%; }
   .modal.ng-leave-active {
     bottom: 0; }
   .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) {
@@ -6338,8 +6339,8 @@ button.item.item-button-right {
   padding-top: 8px;
   padding-bottom: 8px;
   min-height: 30px;
-  background-color: #f5f5f5;
-  color: #222;
+  background-color: #1D1D1D;
+  color: #FFF !important;
   font-weight: 500; }
 
 .platform-ios .item-divider-platform,
