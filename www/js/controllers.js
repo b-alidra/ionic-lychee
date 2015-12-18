@@ -42,6 +42,7 @@ angular.module('lychee.controllers', ['lychee.services'])
     $scope.currentPhoto = null;
     $scope.showInfos    = false;
     $scope.highRes      = false;
+    $scope.rotation     = 0;
 
     $scope.refresh = function() {
         $api.getAlbum($stateParams.albumID, function(err, album) {
@@ -66,6 +67,7 @@ angular.module('lychee.controllers', ['lychee.services'])
     };
 
     $scope.slideChanged = function(index) {
+        $scope.rotation     = 0;
         $scope.currentPhoto = $scope.album.photos[index];
         loadPhotoInfos(index);
     };
@@ -75,10 +77,11 @@ angular.module('lychee.controllers', ['lychee.services'])
         $scope.highRes = !$scope.highRes;
         $scope.showInfos = false;
     }
+    $scope.rotateRight = function() { $scope.rotation += 90; }
+    $scope.rotateLeft = function() { $scope.rotation  -= 90; }
 
     var loadPhotoInfos = function(index) {
         $api.getPhoto($scope.currentPhoto.id, $stateParams.albumID, function(err, photo) {
-            console.log(photo);
             $scope.currentPhoto = photo;
         });
     };
