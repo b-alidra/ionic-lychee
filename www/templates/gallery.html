@@ -1,11 +1,14 @@
 <ion-modal-view class="imageView">
-    <ion-header-bar class="headerView bar-stable" ng-show="!hideAll">
-        <button class="button icon-left ion-ios-close-empty button-clear button-light close-btn" ng-click="closeModal()"></button>
-        <div class="title title-center header-item">
-            {{ currentPhoto.title }}
+    <ion-header-bar class="headerView bar-stable"  align-title="left">
+        <div class="buttons">
+            <button class="button icon-left ion-ios-close-empty button-clear button-light close-btn" ng-click="closeModal()"></button>
         </div>
 
-        <div class="buttons buttons-right">
+        <h1 class="title">
+            {{ currentPhoto.title }}
+        </h1>
+
+        <div class="buttons">
             <button class="button icon-left ion-ios-undo-outline button-clear button-light close-btn" ng-click="rotateLeft()"></button>
             &nbsp;&nbsp;&nbsp;
             <button class="button icon-left ion-ios-redo-outline button-clear button-light close-btn" ng-click="rotateRight()"></button>
@@ -30,9 +33,9 @@
                 delegate-handle="slide-{{$index}}"
                 ng-if="mustBeVisible($index)"
                 >
-                <div class="item item-image gallery-slide-view" style=" transform: rotate({{ rotation }}deg);"  ng-if="!showInfos">
-                    <div class="slide_image" style="background-image: url({{slide.thumbUrl}}); " ng-if="!highRes"></div>
-                    <div class="slide_image" style="background-image: url({{slide.url}}); " ng-if="highRes"></div>
+                <div class="item item-image gallery-slide-view" ng-if="!showInfos">
+                    <div class="slide_image" style="background-image: url({{slide.thumbUrl}}); transform: rotate({{ rotation }}deg); " ng-if="!highRes"></div>
+                    <div class="slide_image" style="background-image: url({{slide.url}}); transform: rotate({{ rotation }}deg); " ng-if="highRes"></div>
                 </div>
                 <div class="item item-infos" ng-if="showInfos">
                     <div class="list stable">

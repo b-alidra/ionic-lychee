@@ -4,6 +4,16 @@ body, ion-content {
   background-size: auto;
 }
 
+
+.multi_items_row  {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
 .album, .photo {
     position: relative;
     width: 152px; /* 20% of the viewport width */
@@ -59,14 +69,6 @@ body, ion-content {
     height: 8px;
     -webkit-filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .4));
     filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .4))
-}
-.multi_items_row  {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
 }
 
 .photo_slide {
