@@ -20,7 +20,11 @@ angular.module('lychee', [
     });
 })
 
-.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
+.config(function($ionicConfigProvider, $httpProvider, $stateProvider, $urlRouterProvider) {
+
+    $ionicConfigProvider.backButton.text("");
+    $ionicConfigProvider.backButton.previousTitleText(false);
+
     function serialize(obj, prefix) {
         var str = [];
         for (var p in obj) {
