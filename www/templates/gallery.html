@@ -1,25 +1,133 @@
 <ion-modal-view class="imageView">
-  <ion-header-bar class="headerView bar-stable" ng-show="!hideAll">
-    <button class="button button-outline button-light close-btn" ng-click="closeModal()">Close</button>
-  </ion-header-bar>
-
-  <ion-content class="has-no-header" scroll="false">
-    <ion-slide-box does-continue="false" active-slide="activeSlide" show-pager="false" class="listContainer" on-slide-changed="slideChanged($index)">
-      <ion-slide ng-repeat="slide in slides track by $index">
-        <ion-scroll direction="xy"
-                    locking="false"
-                    zooming="true"
-                    min-zoom="1"
-                    scrollbar-x="false"
-                    scrollbar-y="false"
-                    ion-slide-action
-                    delegate-handle="slide-{{$index}}"
-                    >
-        <div class="item item-image gallery-slide-view">
-            <div class="slide_image" style="background-image: url({{slide.url}}); "></div>
+    <ion-header-bar class="headerView bar-stable" ng-show="!hideAll">
+        <button class="button icon-left ion-ios-close-empty button-clear button-light close-btn" ng-click="closeModal()"></button>
+        <div class="title title-center header-item">
+            {{ currentPhoto.title }}
+            <!-- ><i class="icon ion-ios-camera-outline"></i>{{ currentPhoto.sysdate }}</a></div> -->
         </div>
-        </ion-scroll>
-      </ion-slide>
+        <button class="button icon-left ion-ios-information-empty button-clear button-light close-btn" ng-click="toggleInfos()"></button>
+    </ion-header-bar>
+
+    <ion-content class="has-no-header">
+        <ion-slide-box does-continue="false" active-slide="activeSlide" show-pager="false" class="listContainer" on-slide-changed="slideChanged($index)">
+            <ion-slide ng-repeat="slide in album.photos track by $index">
+                <ion-scroll direction="xy"
+                locking="false"
+                zooming="true"
+                min-zoom="1"
+                scrollbar-x="false"
+                scrollbar-y="false"
+                ion-slide-action
+                delegate-handle="slide-{{$index}}"
+                ng-if="mustBeVisible($index)"
+                >
+                <div class="item item-image gallery-slide-view" ng-if="!showInfos">
+                    <div class="slide_image" style="background-image: url({{slide.url}}); "></div>
+                </div>
+                <div class="item" ng-if="showInfos">
+                    <div class="list stable">
+                        <div class="item item-divider text-center">
+                            Basics
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Title</div>
+                                <div class="text-right col-75">{{ currentPhoto.title }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Uploaded</div>
+                                <div class="text-right col-75">{{ currentPhoto.takestamp | date:'medium' }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Description</div>
+                                <div class="text-right col-75">{{ currentPhoto.description }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-divider text-center">
+                            Image
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Size</div>
+                                <div class="text-right col-75">{{ currentPhoto.size }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Format</div>
+                                <div class="text-right col-75">{{ currentPhoto.type }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Resolution</div>
+                                <div class="text-right col-75">{{ currentPhoto.width }} x {{ currentPhoto.height }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-divider text-center">
+                            Camera
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Captured</div>
+                                <div class="text-right col-75">{{ currentPhoto.takestamp | date:'medium' }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Make</div>
+                                <div class="text-right col-75">{{ currentPhoto.make }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Model</div>
+                                <div class="text-right col-75">{{ currentPhoto.model }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Shutter Speed</div>
+                                <div class="text-right col-75">{{ currentPhoto.shutter }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Aperture</div>
+                                <div class="text-right col-75">{{ currentPhoto.aperture }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Focal Length</div>
+                                <div class="text-right col-75">{{ currentPhoto.focal }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">ISO</div>
+                                <div class="text-right col-75">{{ currentPhoto.iso }}</div>
+                            </div>
+                        </div>
+                        <div class="item item-divider text-center">
+                            Sharing
+                        </div>
+                        <div class="item item-stable item-complex">
+                            <div class="row">
+                                <div class="text-left col-25">Public</div>
+                                <div class="text-right col-75">{{ currentPhoto.public > 0 ? 'Yes' : 'No' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ion-scroll>
+        </ion-slide>
     </ion-slide-box>
-  </ion-content>
+
+
+</ion-content>
 </ion-modal-view>
