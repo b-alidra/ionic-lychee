@@ -59,17 +59,45 @@ angular.module('lychee.services', [])
                 "password": ""
             })
             .then(function successCallback(response) {
+
+                var album  = response.data;
                 var photos = [];
-                angular.forEach(response.data.content, function(p) {
+
+                angular.forEach(album.content, function(p) {
                     // Fix big and thumbs urls
                     p.url      = lychee_url + '/' + p.url;
                     p.thumbUrl = lychee_url + '/' + p.thumbUrl;
-                    p.prevUrl  = lychee_url + '/uploads/thumb/' + p.previousPhoto;
-                    p.nextUrl  = lychee_url + '/uploads/thumb/' + p.nextPhoto;
 
                     photos.push(p);
                 });
-                callback && callback(null, photos);
+
+                album.photos = photos;
+                delete(album.content);
+
+                callback && callback(null, album);
+            }, function errorCallback(response) {
+                callback && callback({"error": true});
+            });
+        },
+
+        /**
+         * Fetch one photo
+         */
+        getPhoto: function(photoID, albumID, callback) {
+            $http.post(api_url, {
+                "function": "Photo::get",
+                "photoID": photoID,
+                "albumID": albumID,
+                "password": ""
+            })
+            .then(function successCallback(response) {
+                var photo  = response.data;
+
+                // Fix big and thumbs urls
+                photo.url      = lychee_url + '/' + photo.url;
+                photo.thumbUrl = lychee_url + '/' + photo.thumbUrl;
+
+                callback && callback(null, photo);
             }, function errorCallback(response) {
                 callback && callback({"error": true});
             });
