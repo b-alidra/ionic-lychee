@@ -18,10 +18,14 @@ $dark:                            #444 !default;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
-/* Base black color */
+/* Base black background color */
 $stable:                          #222222;
+$dark:                            #1D1D1D  !default;
 $button-stable-text:              #FFF !default;
 $base-background-color:           #1D1D1D !default;
+$card-body-bg:                    #1D1D1D !default;
+/* Base white color */
+$base-color:                       #FFFFFF !default;
 
 /* List divider items */
 $item-divider-bg:                 #1D1D1D !default;
