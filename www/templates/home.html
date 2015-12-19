@@ -1,24 +1,45 @@
 
 <ion-view view-title="Lychee">
-
-    <ion-nav-buttons side="right">
-        <button class="button button-icon button-clear ion-ios-gear-outline" ng-click="doSomething()">
-        </button>
-    </ion-nav-buttons>
-
-    <ion-content></ion-content>
-      <ion-footer-bar align-title="left" class="bar-stable">
-
-
-        <div class="item item-input-inset item-stable" style="width: 100%; border: none;">
-          <label class="item-input-wrapper label-stable">
-            <input type="text" placeholder="Lychee URL" style="width: 100%;" ng-model="lychee_url">
-          </label>
-          <button class="button button-small button-icon" ng-click="storeLycheeUrl()">
-            Show my photos
-          </button>
+    <ion-content>
+        <div class="list list-inset dark">
+            <div class="item item-image no-border">
+                <div id="home_logo_image"></div>
+            </div>
+            <div class="item no-border item-dark text-center">
+                <h2>Please enter your Lychee URL</h2>
+            </div>
+            <div class="item no-border item-input-inset item-dark">
+                <label class="item-input-wrapper">
+                    <input  type="url"
+                            ng-required="true"
+                            placeholder="Your Lychee URL: http://..."
+                            style="width: 100%;"
+                            ng-model="lychee.url"
+                    />
+                </label>
+            </div>
+            <div class="item no-border item-dark assertive animate-show" ng-show="error">
+                <label class="text-center assertive ">{{ error }}</label>
+            </div>
+            <div class="item no-border item-dark animate-show" ng-show="lychee.url">
+                <button
+                    class="button button-full icon-right ion-chevron-right button-outline button-stable"
+                    ng-click="storeLycheeUrl()">
+                    Show my photos
+                </button>
+            </div>
         </div>
-
-
+    </ion-content>
+    <!--
+    <ion-footer-bar align-title="left" class="bar-stable">
+        <div class="item item-input-inset item-stable" style="width: 100%; border: none;">
+            <label class="item-input-wrapper label-stable">
+                <input type="text" placeholder="Your Lychee URL: http://..." style="width: 100%;" ng-model="lychee.url">
+            </label>
+            <button class="button button-small button-icon" ng-click="storeLycheeUrl()">
+                Show my photos
+            </button>
+        </div>
     </ion-footer-bar>
+    -->
 </ion-view>
