@@ -1,17 +1,18 @@
 angular.module('lychee.controllers', ['lychee.services'])
 
 .controller('AppCtrl', function($scope, $state, $ionicHistory, $localStorage) {
+    $scope.error  = "";
+    $scope.lychee = { "url": $localStorage.get("lychee_url") };
 
-    $scope.lychee_url = $localStorage.get("lychee_url");
     $scope.storeLycheeUrl = function() {
-        $localStorage.set("lychee_url", $scope.lychee_url);
+        $localStorage.set("lychee_url", $scope.lychee.url);
         $ionicHistory.nextViewOptions({
             disableBack: true
         });
         $state.go("app.albums");
     };
 
-    if ($scope.lychee_url && $scope.lychee_url.length) {
+    if ($scope.lychee.url && $scope.lychee.url.length) {
         $ionicHistory.nextViewOptions({
             disableBack: true
         });
