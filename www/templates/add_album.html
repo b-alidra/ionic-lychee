@@ -1,0 +1,27 @@
+<ion-modal-view class="imageView">
+    <ion-header-bar class="headerView bar-stable"  align-title="center">
+        <div class="buttons">
+            <button class="button icon-left ion-ios-close-empty button-clear button-light close-btn" ng-click="closeLogin()"></button>
+        </div>
+
+        <h1 class="title">Add album</h1>
+        <div class="buttons"></div>
+    </ion-header-bar>
+    <ion-content>
+        <form ng-submit="doAddAlbum()">
+            <div class="list list-inset dark">
+                <label class="item item-input item-stable">
+                    <span class="input-label light">Album title</span>
+                    <input type="text" ng-required placeholder="Album title" ng-model="newAlbumData.title">
+                </label>
+            </div>
+            <div class="item no-border item-dark assertive animate-show" ng-hide ng-show="add_album_error">
+                <i class="icon ion-alert-circled"></i>
+                <label class="text-center assertive ">{{ add_album_error }}</label>
+            </div>
+            <label class="item item-dark no-border">
+                <button class="button button-full icon-right ion-ios-unlocked-outline button-outline button-stable" type="submit">Add album</button>
+            </label>
+        </form>
+    </ion-content>
+</ion-modal-view>
