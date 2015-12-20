@@ -8,14 +8,14 @@
             <div class="item no-border item-dark text-center">
                 <h2>Please enter your Lychee URL</h2>
             </div>
-            <div class="item no-border item-input-inset item-dark">
-                <label class="item-input-wrapper">
-                    <input  type="url"
-                            ng-required="true"
-                            placeholder="Your Lychee URL: http://..."
-                            style="width: 100%;"
-                            ng-model="lychee.url"
-                    />
+            <div class="list list-inset dark">
+                <label class="item item-input item-stable">
+                    <span class="input-label light">Lychee URL</span>
+                    <input type="url"
+                           placeholder="http://"
+                           ng-model="lychee.url"
+                           ng-required="true"
+                           >
                 </label>
             </div>
             <div class="item no-border item-dark assertive animate-show" ng-hide ng-show="error">
