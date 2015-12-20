@@ -16,6 +16,7 @@ $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
 /* Base black background color */
+/* Inputs */
 /* Base white color */
 /* List divider items */
 /* Fix modal inset mode */
@@ -7685,7 +7686,7 @@ input[type="color"] {
   padding-top: 2px;
   padding-left: 0;
   height: 34px;
-  color: #111;
+  color: #FFFFFF;
   vertical-align: middle;
   font-size: 14px;
   line-height: 16px; }
