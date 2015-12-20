@@ -42,12 +42,7 @@ angular.module('lychee.controllers', ['lychee.services'])
     }
 })
 
-.controller('AlbumsCtrl', function($scope, $rootScope, $api, $ionicModal, $localStorage) {
-    $scope.loginData = {
-        "username": $localStorage.get('username'),
-        "password": $localStorage.get('password')
-    };
-    $scope.login_error = "";
+.controller('AlbumsCtrl', function($scope, $rootScope, $state, $api, $ionicModal, $localStorage) {
 
     $scope.refresh = function() {
         $api.getAlbums(function(err, albums) {
@@ -56,21 +51,29 @@ angular.module('lychee.controllers', ['lychee.services'])
             $scope.$broadcast('scroll.refreshComplete');
         });
     };
+    $scope.refresh();
 
-    $scope.login = function() {
+    /* Login stuff */
+    $scope.loginData = {
+        "username": $localStorage.get('username'),
+        "password": $localStorage.get('password')
+    };
+    $scope.login_error = "";
+
+    $scope.showLogin = function() {
         $ionicModal.fromTemplateUrl('templates/login.html', {
         scope: $scope,
         animation: 'fade-in'
         }).then(function(modal) {
-            $scope.modal = modal;
-            $scope.modal.show();
+            $scope.loginModal = modal;
+            $scope.loginModal.show();
         });
     }
 
     $scope.doLogin = function() {
         $api.login($scope.loginData.username, $scope.loginData.password, function(err, loggedIn) {
             if (err)
-                $loggedIn = false;
+                loggedIn = false;
 
             $rootScope.loggedIn = loggedIn;
 
@@ -95,19 +98,53 @@ angular.module('lychee.controllers', ['lychee.services'])
     };
 
     $scope.closeLogin = function() {
-        $scope.modal.hide();
-        $scope.modal.remove()
+        $scope.loginModal.hide();
+        $scope.loginModal.remove()
     };
+
+    /* New album stuff */
+    $scope.newAlbumData = { "title": "" };
+    $scope.add_album_error = "";
+
+    $scope.showAddAlbum = function() {
+        $ionicModal.fromTemplateUrl('templates/add_album.html', {
+        scope: $scope,
+        animation: 'fade-in'
+        }).then(function(modal) {
+            $scope.addAlbumModal = modal;
+            $scope.addAlbumModal.show();
+        });
+    }
+
+    $scope.doAddAlbum = function() {
+        $api.addAlbum($scope.newAlbumData.title, function(err, albumId) {
+            if (err)
+                added = false;
+
+            if (!albumId)
+                $scope.add_album_error = "Can't add album. An error occured.";
+            else {
+                $scope.add_album_error = "";
+                $scope.closeAddAlbum();
+                $scope.refresh();
+            }
+        });
+    };
+
+    $scope.closeAddAlbum = function() {
+        $scope.addAlbumModal.hide();
+        $scope.addAlbumModal.remove()
+    };
+
 
     $scope.$on('$destroy', function() {
         try{
-            $scope.modal.remove();
+            $scope.loginModal.remove();
+            $scope.addAlbumModal.remove();
         } catch(err) {
             console.log(err.message);
         }
     });
-
-    $scope.refresh();
 })
 
 .controller('AlbumCtrl', function($scope, $api, $stateParams, $ionicModal, $ionicSlideBoxDelegate) {

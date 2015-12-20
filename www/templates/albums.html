@@ -4,9 +4,9 @@
         </button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button class="button button-icon button-clear ion-ios-plus-empty" ng-hide ng-show="loggedIn" g-click="doSomething()">
+        <button class="button button-icon button-clear ion-ios-plus-empty" ng-hide ng-show="loggedIn" ng-click="showAddAlbum()">
         </button>
-        <button class="button button-icon button-clear ion-ios-person-outline" ng-click="login()">
+        <button class="button button-icon button-clear ion-ios-person-outline" ng-click="showLogin()">
         </button>
     </ion-nav-buttons>
 
@@ -23,7 +23,7 @@
                   ui-sref="app.album({albumID: album.id })"
                   ng-repeat="album in albums"
               >
-                <img src="{{ album.thumbs[0] }}">
+                <img src="{{ album.thumbs.length ? album.thumbs[0] : 'img/no_photos.png' }}">
                 <div class="overlay">
 	                  <h1>{{ album.title }}</h1>
 	                  <a>{{ album.sysdate }}</a>

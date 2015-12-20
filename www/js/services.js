@@ -49,7 +49,9 @@ angular.module('lychee.services', [])
 .factory('$api', [ '$http', '$localStorage', function($http, $localStorage) {
     return {
         /**
-         * Fetch all the public albums
+         * Fetch the albums:
+         * - all if the user is logged in
+         * - only the public ones otherwise
          */
         getAlbums: function(callback) {
             var lychee_url = $localStorage.get('lychee_url');
@@ -63,7 +65,8 @@ angular.module('lychee.services', [])
                 var albums = [];
                 angular.forEach(response.data.albums, function(a) {
                     // Fix thumbs url
-                    a.thumbs[0] = lychee_url + '/' + a.thumbs[0];
+                    if (a.thumbs.length > 0)
+                        a.thumbs[0] = lychee_url + '/' + a.thumbs[0];
                     albums.push(a);
                 });
                 callback && callback(null, albums);
@@ -166,6 +169,22 @@ angular.module('lychee.services', [])
             }, function errorCallback(response) {
                 callback && callback({"error": response.statusText});
             });
-        }
+        },
+
+        /**
+         * User login
+         */
+        addAlbum: function(title, callback) {
+            $http.post($localStorage.get('lychee_url') + '/php/api.php', {
+                "function": "Album::add",
+                "title": title
+            })
+            .then(function successCallback(response) {
+                alert(JSON.stringify(response));
+                callback && callback(null, response.data)
+            }, function errorCallback(response) {
+                callback && callback({"error": response.statusText});
+            });
+        },
     };
 }]);
