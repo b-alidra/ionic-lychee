@@ -18,10 +18,11 @@
                     />
                 </label>
             </div>
-            <div class="item no-border item-dark assertive animate-show" ng-show="error">
+            <div class="item no-border item-dark assertive animate-show" ng-hide ng-show="error">
+                <i class="icon ion-alert-circled"></i>
                 <label class="text-center assertive ">{{ error }}</label>
             </div>
-            <div class="item no-border item-dark animate-show" ng-show="lychee.url">
+            <div class="item no-border item-dark animate-show" ng-hide ng-show="lychee.url">
                 <button
                     class="button button-full icon-right ion-chevron-right button-outline button-stable"
                     ng-click="storeLycheeUrl()">
@@ -30,16 +31,4 @@
             </div>
         </div>
     </ion-content>
-    <!--
-    <ion-footer-bar align-title="left" class="bar-stable">
-        <div class="item item-input-inset item-stable" style="width: 100%; border: none;">
-            <label class="item-input-wrapper label-stable">
-                <input type="text" placeholder="Your Lychee URL: http://..." style="width: 100%;" ng-model="lychee.url">
-            </label>
-            <button class="button button-small button-icon" ng-click="storeLycheeUrl()">
-                Show my photos
-            </button>
-        </div>
-    </ion-footer-bar>
-    -->
 </ion-view>

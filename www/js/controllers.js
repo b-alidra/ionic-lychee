@@ -1,40 +1,114 @@
 angular.module('lychee.controllers', ['lychee.services'])
 
-.controller('AppCtrl', function($scope, $state, $ionicHistory, $localStorage) {
+.controller('MenuCtrl', function() {})
+
+.controller('AppCtrl', function($scope, $rootScope, $api, $state, $ionicHistory, $localStorage, $navHelper) {
     $scope.error  = "";
     $scope.lychee = { "url": $localStorage.get("lychee_url") };
 
     $scope.storeLycheeUrl = function() {
         $localStorage.set("lychee_url", $scope.lychee.url);
-        $ionicHistory.nextViewOptions({
-            disableBack: true
-        });
-        $state.go("app.albums");
+        checkLogin();
+    };
+
+    $scope.disconnect = function() {
+        $localStorage.unset('lychee_url');
+        $navHelper.goHome();
     };
 
     if ($scope.lychee.url && $scope.lychee.url.length) {
-        $ionicHistory.nextViewOptions({
-            disableBack: true
-        });
-        $state.go("app.albums");
+        checkLogin();
     }
 
-    $scope.disconnect = function() {
-        $localStorage.set('lychee_url', '');
-        $ionicHistory.nextViewOptions({
-            disableBack: true
-        });
-        $state.go("app.home");
-    };
+    function checkLogin() {
+        stored_username = $localStorage.get('username', 'undefined');
+        stored_password = $localStorage.get('password', 'undefined');
+
+        if (!$rootScope.loggedIn &&
+            stored_username != 'undefined' &&
+            stored_password != 'undefined' ) {
+
+            $api.login(stored_username, stored_password, function(err, loggedIn) {
+                if (err)
+                    loggedIn = false;
+
+                $rootScope.loggedIn = loggedIn;
+                $navHelper.startApp();
+            });
+        }
+        else {
+            $navHelper.startApp();
+        }
+    }
 })
 
-.controller('AlbumsCtrl', function($scope, $api) {
+.controller('AlbumsCtrl', function($scope, $rootScope, $api, $ionicModal, $localStorage) {
+    $scope.loginData = {
+        "username": $localStorage.get('username'),
+        "password": $localStorage.get('password')
+    };
+    $scope.login_error = "";
+
     $scope.refresh = function() {
         $api.getAlbums(function(err, albums) {
             if (!err)
                 $scope.albums = albums;
+            $scope.$broadcast('scroll.refreshComplete');
         });
     };
+
+    $scope.login = function() {
+        $ionicModal.fromTemplateUrl('templates/login.html', {
+        scope: $scope,
+        animation: 'fade-in'
+        }).then(function(modal) {
+            $scope.modal = modal;
+            $scope.modal.show();
+        });
+    }
+
+    $scope.doLogin = function() {
+        $api.login($scope.loginData.username, $scope.loginData.password, function(err, loggedIn) {
+            if (err)
+                $loggedIn = false;
+
+            $rootScope.loggedIn = loggedIn;
+
+            if (!loggedIn)
+                $scope.login_error = "Can't connect. Please check your infos.";
+            else {
+                $scope.login_error = "";
+                $scope.closeLogin();
+                $scope.refresh();
+            }
+        });
+    };
+
+    $scope.logout = function() {
+        $api.logout(function(err, loggedOut) {
+            if (!err && loggedOut)
+                $rootScope.loggedIn = false;
+
+            $scope.closeLogin();
+            $scope.refresh();
+        });
+    };
+
+    $scope.closeLogin = function() {
+        $scope.modal.hide();
+        $scope.modal.remove()
+    };
+
+    $scope.$on('$destroy', function() {
+        try{
+            $scope.modal.remove();
+        } catch(err) {
+            console.log(err.message);
+        }
+    });
+
+alert('in');
+    $scope.refresh();
 })
 
 .controller('AlbumCtrl', function($scope, $api, $stateParams, $ionicModal, $ionicSlideBoxDelegate) {
@@ -48,7 +122,7 @@ angular.module('lychee.controllers', ['lychee.services'])
     $scope.refresh = function() {
         $api.getAlbum($stateParams.albumID, function(err, album) {
             if (!err)
-                $scope.album = album;
+            $scope.album = album;
         });
     };
 
@@ -97,9 +171,9 @@ angular.module('lychee.controllers', ['lychee.services'])
 
     $scope.$on('$destroy', function() {
         try{
-          $scope.modal.remove();
+            $scope.modal.remove();
         } catch(err) {
-          console.log(err.message);
+            console.log(err.message);
         }
-      });
+    });
 });
