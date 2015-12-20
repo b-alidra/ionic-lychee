@@ -107,7 +107,6 @@ angular.module('lychee.controllers', ['lychee.services'])
         }
     });
 
-alert('in');
     $scope.refresh();
 })
 
