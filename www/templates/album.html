@@ -2,13 +2,15 @@
     <ion-nav-title>
         {{ album.title }}
     </ion-nav-title>
+    <ion-nav-bar class="bar-stable">
+        <ion-nav-back-button></ion-nav-back-button>
+    </ion-nav-bar>
     <ion-nav-buttons side="right">
-        <button class="button button-icon button-clear ion-ios-plus-empty" ng-hide ng-show="loggedIn" ng-click="doSomething()">
+        <button class="button button-icon button-clear ion-ios-plus-empty" ng-hide ng-show="loggedIn" ng-click="showUpload()">
         </button>
     </ion-nav-buttons>
 
     <ion-content class="scroll-bg" ng-init="refresh()">
-
         <div class="multi_items_row">
             <div class="photo" ng-repeat="photo in album.photos">
                 <img src="{{ photo.thumbUrl }}" ng-click="showGallery({{$index}})">
@@ -18,6 +20,5 @@
                 </div>
             </div>
         </div>
-
     </ion-content>
 </ion-view>

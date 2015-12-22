@@ -1,0 +1,33 @@
+<ion-modal-view class="imageView">
+    <ion-header-bar class="headerView bar-stable"  align-title="center">
+        <div class="buttons">
+            <button class="button icon-left ion-ios-close-empty button-clear button-light close-btn" ng-click="closeUploadModal()"></button>
+        </div>
+        <h1 class="title">Upload photos</h1>
+        <div class="buttons"></div>
+    </ion-header-bar>
+    <ion-content>
+        <label class="item item-dark no-border">
+            <button
+                class="button button-full icon-right ion-ios-albums-outline button-outline button-stable"
+                ng-click="choosePhoto()">
+                Choose photos from your library
+            </button>
+        </label>
+        </div>
+        <div class="item no-border item-dark assertive animate-show" ng-hide ng-show="upload_error != ''">
+            <i class="icon ion-alert-circled"></i>
+            <label class="text-center assertive ">{{ upload_error }}</label>
+        </div>
+        <div class="item item-thumbnail-left item-dark item-inset item-thumbnail" ng-hide ng-show="uploads.length > 0" ng-repeat="upload in uploads">
+            <img class="full-image" ng-src="{{ upload.preview_uri }}" />
+            <h2>{{ upload.filename }}</h2>
+            <p>Status: {{ upload.status }}</p>
+            <div ng-hide>
+                <div style="text-align: center; height: 20px; border-radius: 4px; background-color: #52CC52; width: {{ upload.uploaded }}%;">
+                    {{ upload.uploaded }} %
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

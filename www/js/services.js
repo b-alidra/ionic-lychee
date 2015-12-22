@@ -1,8 +1,8 @@
 angular.module('lychee.services', [])
 
 /**
- * Local storage services
- */
+* Local storage services
+*/
 .factory('$localStorage', ['$window', function($window) {
     return {
         set: function(key, value) {
@@ -19,13 +19,19 @@ angular.module('lychee.services', [])
         },
         getObject: function(key) {
             return JSON.parse($window.localStorage[key] || '{}');
+        },
+        setArray: function(key, value) {
+            $window.localStorage[key] = JSON.stringify(value);
+        },
+        getArray: function(key) {
+            return JSON.parse($window.localStorage[key] || '[]');
         }
     }
 }])
 
 /**
- * Navigation helper service
- */
+* Navigation helper service
+*/
 .factory('$navHelper', ['$window', '$ionicHistory', '$state', function($window, $ionicHistory, $state) {
     return {
         goHome: function() {
@@ -35,24 +41,93 @@ angular.module('lychee.services', [])
             $state.go("app.home");
         },
         startApp: function() {
-            $ionicHistory.nextViewOptions({
-                disableBack: true
-            });
             $state.go("app.albums");
         }
     };
 }])
 
 /**
- * Lychee API client
- */
+* Navigation helper service
+*/
+.factory('$uploader', ['$rootScope', '$localStorage', '$api', '$timeout', function($rootScope, $localStorage, $api, $timeout) {
+    return {
+        init: function() {
+            if ($rootScope.initialized)
+                return true;
+
+            $rootScope.initialized = true;
+            $rootScope.uploads = [];//$localStorage.getArray('uploads');
+            $rootScope.$watch(
+                function() {
+                    return $rootScope.uploads.length;
+                },
+                function(newLength, oldLength) {
+                    $localStorage.setArray('uploads', $rootScope.uploads);
+                    if ($rootScope.uploads.length <= 0)
+                        return false;
+
+                    $nb_uploading = 0;
+                    for (var i = 0; i < $rootScope.uploads.length; i++) {
+                        if ($rootScope.uploads[i].status != 'waiting')
+                            continue;
+
+                        if ($rootScope.uploads[i].status == 'uploading' && ++$nb_uploading > 1)
+                            break;
+
+                        $rootScope.uploads[i].status = 'uploading';
+                        $timeout(function() {
+                            $api.addPhoto($rootScope.uploads[i],
+                                function (progressEvent) {
+                                    if (progressEvent.lengthComputable) {
+                                        console.log(progressEvent.loaded + ' / ' + progressEvent.total);
+                                        $rootScope.$apply($rootScope.uploads[i].uploaded = Math.round(progressEvent.loaded / progressEvent.total * 100));
+                                    } else {
+                                        $rootScope.$apply($rootScope.uploads[i].uploaded += 1);
+                                    }
+                                },
+                                function (err, FileUploadResult) {
+                                    if (err) {
+                                        alert ('Error: ' + JSON.stringify(FileUploadResult));
+                                        $rootScope.$apply(function() { $rootScope.uploads[i].status = "error"; });
+                                    }
+                                    else {
+                                        $timeout(function() { $rootScope.uploads[i].status = "uploaded"; }, 2000);
+                                    }
+
+                                    $localStorage.setArray('uploads', $rootScope.uploads);
+                                }
+                            );
+                        }, 500);
+
+                        break;
+                    }
+                }
+            );
+        },
+        addUpload: function(uri, preview_uri, albumId, albumTitle) {
+            $rootScope.uploads.push({
+                "uri": uri,
+                "preview_uri": preview_uri,
+                "filename": preview_uri.substr(preview_uri.lastIndexOf('/') + 1),
+                "albumId": albumId,
+                "albumTitle": albumTitle,
+                "status": "waiting",
+                "uploaded": 0
+            });
+        }
+    };
+}])
+
+/**
+* Lychee API client
+*/
 .factory('$api', [ '$http', '$localStorage', function($http, $localStorage) {
     return {
         /**
-         * Fetch the albums:
-         * - all if the user is logged in
-         * - only the public ones otherwise
-         */
+        * Fetch the albums:
+        * - all if the user is logged in
+        * - only the public ones otherwise
+        */
         getAlbums: function(callback) {
             var lychee_url = $localStorage.get('lychee_url');
             var api_url    = lychee_url + '/php/api.php';
@@ -66,7 +141,7 @@ angular.module('lychee.services', [])
                 angular.forEach(response.data.albums, function(a) {
                     // Fix thumbs url
                     if (a.thumbs.length > 0)
-                        a.thumbs[0] = lychee_url + '/' + a.thumbs[0];
+                    a.thumbs[0] = lychee_url + '/' + a.thumbs[0];
                     albums.push(a);
                 });
                 callback && callback(null, albums);
@@ -76,8 +151,8 @@ angular.module('lychee.services', [])
         },
 
         /**
-         * Fetch one album
-         */
+        * Fetch one album
+        */
         getAlbum: function(albumID, callback) {
             var lychee_url = $localStorage.get('lychee_url');
             var api_url    = lychee_url + '/php/api.php';
@@ -110,8 +185,8 @@ angular.module('lychee.services', [])
         },
 
         /**
-         * Fetch one photo
-         */
+        * Fetch one photo
+        */
         getPhoto: function(photoID, albumID, callback) {
             var lychee_url = $localStorage.get('lychee_url');
             var api_url    = lychee_url + '/php/api.php';
@@ -136,8 +211,8 @@ angular.module('lychee.services', [])
         },
 
         /**
-         * User login
-         */
+        * User login
+        */
         login: function(username, password, callback) {
             $http.post($localStorage.get('lychee_url') + '/php/api.php', {
                 "function": "Session::login",
@@ -156,8 +231,8 @@ angular.module('lychee.services', [])
         },
 
         /**
-         * User logout
-         */
+        * User logout
+        */
         logout: function(callback) {
             $http.post($localStorage.get('lychee_url') + '/php/api.php', {
                 "function": "Session::logout"
@@ -172,19 +247,43 @@ angular.module('lychee.services', [])
         },
 
         /**
-         * User login
-         */
+        * Create new album
+        */
         addAlbum: function(title, callback) {
             $http.post($localStorage.get('lychee_url') + '/php/api.php', {
                 "function": "Album::add",
                 "title": title
             })
             .then(function successCallback(response) {
-                alert(JSON.stringify(response));
                 callback && callback(null, response.data)
             }, function errorCallback(response) {
                 callback && callback({"error": response.statusText});
             });
         },
+
+        /**
+        * Send a photo
+        */
+        addPhoto: function(upload, onprogress, callback) {
+            var options = new FileUploadOptions();
+            options.fileKey = "file";
+            options.fileName = upload.uri.substr(upload.uri.lastIndexOf('/') + 1);
+            options.params = {
+                function: "Photo::add",
+                albumID: upload.albumId,
+                tags: ""
+            };
+
+            var ft = new FileTransfer();
+            ft.onprogress = onprogress;
+
+            ft.upload(
+                upload.uri,
+                encodeURI($localStorage.get('lychee_url') + '/php/api.php'),
+                function (FileUploadResult) { callback && callback(null, FileUploadResult); },
+                function (FileUploadResult) { callback && callback({ "error": FileUploadResult }); },
+                options
+            );
+        }
     };
 }]);
