@@ -1,6 +1,7 @@
 angular.module('lychee', [
     'ngIOS9UIWebViewPatch',
     'ionic',
+    'ngCordova',
     'lychee.services',
     'lychee.controllers'
 ])
