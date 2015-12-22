@@ -18,11 +18,14 @@ body, ion-content {
     width: 100%;
     height: 180px;
     background: #1D1D1D url('../img/lychee.png') no-repeat center center;
+    background-size: contain;
 }
 .animate-show { opacity: 1; }
 .animate-show.ng-hide-add, .animate-show.ng-hide-remove { transition: all linear 0.25s; }
 .animate-show.ng-hide { opacity: 0; }
 
+/* Inputs */
+.item-input { border-width: 3px; }
 .multi_items_row  {
     display: -webkit-flex;
     display: -ms-flexbox;
