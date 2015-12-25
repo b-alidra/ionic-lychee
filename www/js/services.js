@@ -47,39 +47,38 @@ angular.module('lychee.services', [])
 }])
 
 /**
-* Navigation helper service
+* Uploads service: handles the image picker and the file transfers
 */
-.factory('$uploader', ['$rootScope', '$localStorage', '$api', '$timeout', function($rootScope, $localStorage, $api, $timeout) {
+.factory('$uploader',
+    ['$rootScope', '$api', '$timeout', '$ionicModal', '$cordovaImagePicker',
+    function($rootScope, $api, $timeout, $ionicModal, $cordovaImagePicker) {
+
     return {
         init: function() {
             if ($rootScope.initialized)
                 return true;
 
-            $rootScope.initialized = true;
-            $rootScope.uploads = [];//$localStorage.getArray('uploads');
+            $rootScope.initialized  = true;
+            $rootScope.uploads      = [];
+            $rootScope.upload_error = "";
+
             $rootScope.$watch(
                 function() {
                     return $rootScope.uploads.length;
                 },
                 function(newLength, oldLength) {
-                    $localStorage.setArray('uploads', $rootScope.uploads);
                     if ($rootScope.uploads.length <= 0)
                         return false;
 
-                    $nb_uploading = 0;
                     for (var i = 0; i < $rootScope.uploads.length; i++) {
                         if ($rootScope.uploads[i].status != 'waiting')
                             continue;
-
-                        if ($rootScope.uploads[i].status == 'uploading' && ++$nb_uploading > 1)
-                            break;
 
                         $rootScope.uploads[i].status = 'uploading';
                         $timeout(function() {
                             $api.addPhoto($rootScope.uploads[i],
                                 function (progressEvent) {
                                     if (progressEvent.lengthComputable) {
-                                        console.log(progressEvent.loaded + ' / ' + progressEvent.total);
                                         $rootScope.$apply($rootScope.uploads[i].uploaded = Math.round(progressEvent.loaded / progressEvent.total * 100));
                                     } else {
                                         $rootScope.$apply($rootScope.uploads[i].uploaded += 1);
@@ -87,14 +86,11 @@ angular.module('lychee.services', [])
                                 },
                                 function (err, FileUploadResult) {
                                     if (err) {
-                                        alert ('Error: ' + JSON.stringify(FileUploadResult));
                                         $rootScope.$apply(function() { $rootScope.uploads[i].status = "error"; });
                                     }
                                     else {
-                                        $timeout(function() { $rootScope.uploads[i].status = "uploaded"; }, 2000);
+                                        $timeout(function() { $rootScope.uploads[i].status = "uploaded"; }, 100);
                                     }
-
-                                    $localStorage.setArray('uploads', $rootScope.uploads);
                                 }
                             );
                         }, 500);
@@ -104,16 +100,54 @@ angular.module('lychee.services', [])
                 }
             );
         },
-        addUpload: function(uri, preview_uri, albumId, albumTitle) {
-            $rootScope.uploads.push({
-                "uri": uri,
-                "preview_uri": preview_uri,
-                "filename": preview_uri.substr(preview_uri.lastIndexOf('/') + 1),
-                "albumId": albumId,
-                "albumTitle": albumTitle,
-                "status": "waiting",
-                "uploaded": 0
+
+        isUploading: function() {
+            for (var i = 0; i < $rootScope.uploads.length; i++) {
+                if ($rootScope.uploads[i].status == 'uploading')
+                    return true;
+            }
+            return false;
+        },
+
+        choosePhotos: function(albumId, albumTitle) {
+            var self = this;
+            $cordovaImagePicker.getPictures()
+            .then(function (results) {
+                for (var i = 0; i < results.length; i += 2) {
+                    $rootScope.$apply(
+                        function() {
+                            $rootScope.uploads.push({
+                                "uri": results[i],
+                                "preview_uri": results[i + 1],
+                                "filename": results[i + 1].substr(results[i + 1].lastIndexOf('/') + 1),
+                                "albumId": albumId,
+                                "albumTitle": albumTitle,
+                                "status": "waiting",
+                                "uploaded": 0
+                            })
+                        }
+                    );
+                }
+                if (results.length > 0)
+                    self.showUploads();
+            }, function(error) {
+                // error getting photos
             });
+        },
+
+        showUploads: function() {
+            $ionicModal.fromTemplateUrl('templates/uploads.html', {
+                scope: $rootScope,
+                animation: 'slide-in-up'
+            }).then(function(modal) {
+                $rootScope.uploadModal = modal;
+                $rootScope.uploadModal.show();
+            });
+        },
+
+        closeUploadModal: function() {
+            $rootScope.uploadModal.hide();
+            $rootScope.uploadModal.remove()
         }
     };
 }])
