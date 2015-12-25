@@ -6,14 +6,16 @@
         <ion-nav-back-button></ion-nav-back-button>
     </ion-nav-bar>
     <ion-nav-buttons side="right">
-        <button class="button button-icon button-clear ion-ios-plus-empty" ng-hide ng-show="loggedIn" ng-click="showUpload()">
+        <button class="button button-icon button-positive ion-ios-pulse button-clear padding-right animate-show" ng-hide ng-show="isUploading()" ng-click="showUploads()">
+        </button>
+        <button class="button button-icon button-clear ion-ios-cloud-upload-outline animate-show" ng-hide ng-show="loggedIn" ng-click="choosePhotos()">
         </button>
     </ion-nav-buttons>
 
     <ion-content class="scroll-bg" ng-init="refresh()">
         <div class="multi_items_row">
             <div class="photo" ng-repeat="photo in album.photos">
-                <img src="{{ photo.thumbUrl }}" ng-click="showGallery({{$index}})">
+                <img ng-src="{{ photo.thumbUrl }}" ng-click="showGallery({{$index}})">
                 <div class="overlay">
                     <h1>{{ photo.title }}</h1>
                     <a><i class="icon ion-ios-camera-outline"></i>{{ photo.sysdate }}</a>

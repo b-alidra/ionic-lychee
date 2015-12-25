@@ -1,8 +1,10 @@
 <ion-view view-title="{{ albums.length}} Albums">
     <ion-nav-buttons side="right">
-        <button class="button button-icon button-clear ion-ios-plus-empty" ng-hide ng-show="loggedIn" ng-click="showAddAlbum()">
+        <button class="button button-icon button-positive ion-ios-pulse button-clear padding-right animate-show" ng-hide ng-show="isUploading()" ng-click="showUploads()">
         </button>
-        <button class="button button-icon button-clear ion-ios-person-outline" ng-click="showLogin()">
+        <button class="button button-icon button-clear ion-ios-plus-empty animate-show" ng-hide ng-show="loggedIn" ng-click="showAddAlbum()">
+        </button>
+        <button class="button button-icon button-clear ion-ios-person-outline animate-show" ng-click="showLogin()">
         </button>
     </ion-nav-buttons>
     <ion-content class="scroll-bg">
@@ -16,7 +18,7 @@
                   ui-sref="app.album({albumID: album.id })"
                   ng-repeat="album in albums"
               >
-                <img src="{{ album.thumbs.length ? album.thumbs[0] : 'img/no_photos.png' }}">
+                <img ng-src="{{ album.thumbs.length ? album.thumbs[0] : 'img/no_photos.png' }}">
                 <div class="overlay">
 	                  <h1>{{ album.title }}</h1>
 	                  <a>{{ album.sysdate }}</a>
