@@ -6,7 +6,7 @@ angular.module('lychee', [
     'lychee.controllers'
 ])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $uploader) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -18,6 +18,8 @@ angular.module('lychee', [
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
+
+        $uploader.init();
     });
 })
 
