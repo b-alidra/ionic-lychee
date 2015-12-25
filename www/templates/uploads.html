@@ -1,33 +1,28 @@
 <ion-modal-view class="imageView">
     <ion-header-bar class="headerView bar-stable"  align-title="center">
         <div class="buttons">
-            <button class="button icon-left ion-ios-close-empty button-clear button-light close-btn" ng-click="closeUploadModal()"></button>
+            <button class="button icon-left ion-ios-close-empty button-clear button-light close-btn" ng-click="uploadModal.hide(); uploadModal.remove();"></button>
         </div>
-        <h1 class="title">Upload photos</h1>
-        <div class="buttons"></div>
+        <h1 class="title">Uploads</h1>
     </ion-header-bar>
     <ion-content>
-        <label class="item item-dark no-border">
-            <button
-                class="button button-full icon-right ion-ios-albums-outline button-outline button-stable"
-                ng-click="choosePhoto()">
-                Choose photos from your library
-            </button>
-        </label>
-        </div>
-        <div class="item no-border item-dark assertive animate-show" ng-hide ng-show="upload_error != ''">
-            <i class="icon ion-alert-circled"></i>
-            <label class="text-center assertive ">{{ upload_error }}</label>
-        </div>
-        <div class="item item-thumbnail-left item-dark item-inset item-thumbnail" ng-hide ng-show="uploads.length > 0" ng-repeat="upload in uploads">
-            <img class="full-image" ng-src="{{ upload.preview_uri }}" />
-            <h2>{{ upload.filename }}</h2>
-            <p>Status: {{ upload.status }}</p>
-            <div ng-hide>
-                <div style="text-align: center; height: 20px; border-radius: 4px; background-color: #52CC52; width: {{ upload.uploaded }}%;">
-                    {{ upload.uploaded }} %
-                </div>
+        <h1 class="item item-center text-center item-icon-left item-dark animate-show" ng-show="uploads.length <= 0" href="#">
+            <br/>
+            <i class="icon ion-ios-information-outline"></i>
+            There's no uploads to show
+            <br/><br/>
+        </h1>
+        <div class="item item-thumbnail-left item-dark item-icon-right item-inset item-thumbnail animate-show" ng-hide ng-if="upload.status != 'uploaded'" ng-repeat="upload in uploads">
+            <img ng-src="{{ upload.preview_uri }}" />
+            <h2>&nbsp;</h2>
+            <div class="text-center positive-bg padding-top padding-bottom" style="border-radius: 4px; width: {{ upload.uploaded }}%;">
+                <span ng-if="upload.uploaded < 20">-</span>
+                <span ng-if="upload.uploaded >= 20">{{ upload.uploaded }} %</span>
             </div>
+            <i class="icon ion-pause" ng-if="upload.status == 'waiting'"></i>
+            <ion-spinner class="icon" icon="spiral" ng-if="upload.status == 'uploading'"></ion-spinner>
+            <i class="icon ion-android-done" ng-if="upload.status == 'uploaded'"></i>
+            <i class="icon ion-android-warning" ng-if="upload.status == 'error'"></i>
         </div>
     </ion-content>
 </ion-modal-view>
