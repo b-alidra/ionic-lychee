@@ -62,49 +62,47 @@ angular.module('lychee.services', [])
             $rootScope.uploads      = [];
             $rootScope.upload_error = "";
 
-            $rootScope.$watch(
-                function() {
-                    return $rootScope.uploads.length;
-                },
-                function(newLength, oldLength) {
+            $rootScope.$watch('uploads',
+                function(newUploads, oldUploads) {
+
                     if ($rootScope.uploads.length <= 0)
                         return false;
 
                     for (var i = 0; i < $rootScope.uploads.length; i++) {
-                        if ($rootScope.uploads[i].status != 'waiting')
+                        if ($rootScope.uploads[i].status != "waiting")
                             continue;
 
                         $rootScope.uploads[i].status = 'uploading';
-                        $timeout(function() {
-                            $api.addPhoto($rootScope.uploads[i],
-                                function (progressEvent) {
-                                    if (progressEvent.lengthComputable) {
-                                        $rootScope.$apply($rootScope.uploads[i].uploaded = Math.round(progressEvent.loaded / progressEvent.total * 100));
-                                    } else {
-                                        $rootScope.$apply($rootScope.uploads[i].uploaded += 1);
-                                    }
-                                },
-                                function (err, FileUploadResult) {
-                                    if (err) {
-                                        $rootScope.$apply(function() { $rootScope.uploads[i].status = "error"; });
-                                    }
-                                    else {
-                                        $timeout(function() { $rootScope.uploads[i].status = "uploaded"; }, 100);
-                                    }
-                                }
-                            );
-                        }, 500);
 
+                        $api.addPhoto($rootScope.uploads[i],
+                            function (progressEvent) {
+                                $rootScope.$apply(function() {
+                                    if (progressEvent.lengthComputable) {
+                                        $rootScope.uploads[i].uploaded = Math.round(progressEvent.loaded / progressEvent.total * 100);
+                                    } else {
+                                        $rootScope.uploads[i].uploaded += 1;
+                                    }
+                                });
+                            },
+                            function (err, FileUploadResult) {
+                                $rootScope.$apply(function() {
+                                    $rootScope.uploads[i].status = err ? "error" : "uploaded";
+                                });
+                            }
+                        );
                         break;
                     }
-                }
+                }, true
             );
         },
 
         isUploading: function() {
+            if (!$rootScope.uploads)
+                return false;
             for (var i = 0; i < $rootScope.uploads.length; i++) {
-                if ($rootScope.uploads[i].status == 'uploading')
+                if ($rootScope.uploads[i].status == 'uploading') {
                     return true;
+                }
             }
             return false;
         },
@@ -113,9 +111,9 @@ angular.module('lychee.services', [])
             var self = this;
             $cordovaImagePicker.getPictures()
             .then(function (results) {
-                for (var i = 0; i < results.length; i += 2) {
-                    $rootScope.$apply(
-                        function() {
+                $rootScope.$apply(
+                    (function(results) {
+                        for (var i = 0; i < results.length; i += 2) {
                             $rootScope.uploads.push({
                                 "uri": results[i],
                                 "preview_uri": results[i + 1],
@@ -124,12 +122,12 @@ angular.module('lychee.services', [])
                                 "albumTitle": albumTitle,
                                 "status": "waiting",
                                 "uploaded": 0
-                            })
+                            });
                         }
-                    );
-                }
-                if (results.length > 0)
-                    self.showUploads();
+                        if (results.length > 0)
+                            self.showUploads();
+                     })(results)
+                );
             }, function(error) {
                 // error getting photos
             });
@@ -301,7 +299,7 @@ angular.module('lychee.services', [])
         addPhoto: function(upload, onprogress, callback) {
             var options = new FileUploadOptions();
             options.fileKey = "file";
-            options.fileName = upload.uri.substr(upload.uri.lastIndexOf('/') + 1);
+            options.fileName = upload.preview_uri.substr(upload.preview_uri.lastIndexOf('/') + 1);
             options.params = {
                 function: "Photo::add",
                 albumID: upload.albumId,
@@ -310,7 +308,6 @@ angular.module('lychee.services', [])
 
             var ft = new FileTransfer();
             ft.onprogress = onprogress;
-
             ft.upload(
                 upload.uri,
                 encodeURI($localStorage.get('lychee_url') + '/php/api.php'),

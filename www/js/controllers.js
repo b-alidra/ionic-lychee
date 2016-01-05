@@ -48,7 +48,7 @@ angular.module('lychee.controllers', ['lychee.services'])
     $scope.refresh = function() {
         $api.getAlbums(function(err, albums) {
             if (!err)
-            $scope.albums = albums;
+                $scope.albums = albums;
             $scope.$broadcast('scroll.refreshComplete');
         });
     };
@@ -166,7 +166,8 @@ angular.module('lychee.controllers', ['lychee.services'])
     $scope.refresh = function() {
         $api.getAlbum($stateParams.albumID, function(err, album) {
             if (!err)
-            $scope.album = album;
+                $scope.album = album;
+            $scope.$broadcast('scroll.refreshComplete');
         });
     };
 
