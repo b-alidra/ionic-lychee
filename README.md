@@ -8,8 +8,12 @@ Lychee is a free photo-management tool, which runs on your server or web-space. 
 [Ionic](http://ionicframework.com/) is the open source HTML5 Mobile Framework for building amazing, cross-platform hybrid native apps and mobile websites with HTML, JavaScript, and CSS. If you know how to build or design websites, you will be able to build a real mobile app with Ionic!
 
 #### This project
-This app is only a "viewer" for now.  
-Connect to your Lychee server and visualize your photos.  
+This app allows you to:
+ - Connect to your Lychee server and visualize your photos
+ - Login
+ - Create albums
+ - Upload photos  
+
 #### Live test on your device
 In case you don't know, Ionic View mobile app is the simplest way to test an ionic app. Download it here http://view.ionic.io/
 
